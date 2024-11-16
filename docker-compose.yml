@@ -1,0 +1,10 @@
+services:
+  db:
+    image: postgres:15.9-alpine3.20
+    container_name: my_postgres_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
