@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock%}</title>
+</head>
+<body>
+<header>
+    <div>
+        <a class="" href="/">Главная</a>
+    </div>
+    <div>
+        {% if user.is_authenticated %}
+        {{ user.login }}
+        <a class="" href="/user/logout">Выйти</a>
+        {% else %}
+        <a class="" href="/user/login">Войти</a>
+        {% endif %}
+    </div>
+</header>
+{% block content %}
+{% endblock%}
+
+</body>
+</html>
