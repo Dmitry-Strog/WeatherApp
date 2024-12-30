@@ -27,8 +27,9 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    login = models.CharField(max_length=255, unique=True)
-    password = models.CharField(max_length=255)
+    login = models.CharField(max_length=255, unique=True, verbose_name="Логин",
+                             error_messages={'unique': 'Это имя пользователя уже существует.'})
+    password = models.CharField(max_length=255, verbose_name="Пароль")
     email = models.EmailField(blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
