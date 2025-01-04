@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}
+WeatherAPP
+{% endblock%}
+
+{% block content %}
+<div>
+    <form action="{% url 'weather:search' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Найти</button>
+    </form>
+</div>
+
+{% if city %}
+{% for c in city %}
+<div>
+    <p> Город: {{ c.name }} </p>
+    <p> Широта/Долгота: {{ c.lat }}, {{ c.lon }} </p>
+    <p> Страна: {{ c.country }}, {{ c.state|default:"Не указан" }} </p>
+    <form action="{% url 'weather:home' %}" method="post" style="display: inline;">
+        {% csrf_token %}
+        <input type="hidden" name="city" value="{{ c.name }}">
+        <input type="hidden" name="lat" value="{{ c.lat }}">
+        <input type="hidden" name="lon" value="{{ c.lon }}">
+        <button type="submit">Добавить</button>
+    </form>
+</div>
+<hr>
+{% endfor %}
+{% endif %}
+
+{% endblock %}
