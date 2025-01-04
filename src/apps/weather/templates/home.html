@@ -5,5 +5,29 @@ WeatherAPP
 {% endblock%}
 
 {% block content %}
-<h1> Главная страница </h1>
+<div>
+    <form action="{% url 'weather:search' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Найти</button>
+    </form>
+</div>
+{% if user.is_authenticated %}
+{% for w in weather %}
+<p>Город: {{ w.weather.name }}</p>
+<p>Температура: {{ w.weather.main.temp|floatformat:"0" }} °C, {{ w.weather.weather.0.description }}</p>
+<p>Ощущается как: {{ w.weather.main.feels_like|floatformat:"0" }} °C</p>
+<p>Влажность: {{ w.weather.main.humidity|floatformat:"0" }}</p>
+<form action="{% url 'weather:delete' %}" method="post" style="display: inline;">
+    {% csrf_token %}
+    <input type="hidden" name="city" value="{{ w.name_city }}">
+    <input type="hidden" name="lat" value="{{ w.latitude }}">
+    <input type="hidden" name="lon" value="{{ w.longitude }}">
+    <button type="submit" class="btn btn-danger">Удалить</button>
+</form>
+<hr>
+{% endfor %}
+{% else %}
+<h1> WeatherAPP </h1>
+{% endif %}
 {% endblock %}
