@@ -6,13 +6,26 @@ from apps.user.models import CustomUser
 
 
 class LoginForm(forms.Form):
-    login = forms.CharField(label="Логин")
-    password = forms.CharField(label="Пароль", widget=forms.PasswordInput)
+    login = forms.CharField(label="Логин", widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Введите логин',
+    }))
+    password = forms.CharField(label="Пароль", widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Введите пароль',
+    }))
 
 
 class RegisterForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput, label="Пароль")
-    confirm_password = forms.CharField(widget=forms.PasswordInput, label="Подтвердите пароль")
+    login = forms.CharField(label="Логин", widget=forms.TextInput(attrs={
+        'class': 'form-control',
+    }))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+    }), label="Пароль")
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+    }), label="Подтвердите пароль")
 
     class Meta:
         model = CustomUser

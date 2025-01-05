@@ -48,7 +48,7 @@ def search_result(request):
     context = {
         'user': request.user,
         'form': form,
-        'city': weather_json,
+        'weather': weather_json,
     }
     return render(request, "city_search_results.html", context)
 

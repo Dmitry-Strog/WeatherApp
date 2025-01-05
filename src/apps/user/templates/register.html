@@ -1,14 +1,39 @@
 {% extends "base.html" %}
 
 {% block title %}
-Регистрация
+Weather Viewer – Sign Up
 {% endblock%}
 
 {% block content %}
-<h1>Регистрация</h1>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Зарегистрироваться</button>
-</form>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="weather-logo"></div>
+        </div>
+    </div>
+
+    <h2 class="text-center mb-5">Регистрация</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-4 col-md-6 col-sm-12">
+            <form action="" method="POST" class="mt-4">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="username" class="form-label">Логин</label>
+                    {{ form.login }}
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Пароль</label>
+                    {{ form.password }}
+                </div>
+                <div class="mb-3">
+                    <label for="repeat-password" class="form-label">Подтвердите пароль</label>
+                    {{ form.confirm_password }}
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mt-3">Зарегистрироваться</button>
+                <p class="mt-2 text-center">У вас уже есть аккаунт? <a href="{% url 'user:login' %}">Авторизация</a></p>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

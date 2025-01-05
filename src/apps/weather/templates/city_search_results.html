@@ -1,34 +1,62 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
-WeatherAPP
+Weather Viewer – Search
 {% endblock%}
 
+
 {% block content %}
-<div>
-    <form action="{% url 'weather:search' %}" method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Найти</button>
-    </form>
-</div>
+<section id="page-content">
+    <div class="container mt-4">
+        <div class="d-flex my-4">
+            <form action="{% url 'weather:search' %}" method="POST" class="d-flex w-100">
+                {% csrf_token %}
+                <div class="input-group location-search-input-group me-3">
+                    {{ form.city }}
+                    <button class="btn btn-outline-secondary btn-sm clear-input-button" type="button"
+                            onclick="this.previousElementSibling.value=''">
+                        &times;
+                    </button>
+                </div>
+                <button class="btn btn-outline-success" type="submit">Поиск</button>
+            </form>
+        </div>
+        <div>
+            <h2>Локации:</h2>
+            <div class="row">
+                {% for w in weather %}
+                <div class="col-12 col-lg-3 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ w.name }}</h5>
+                            <p class="card-text mb-1">Долгота: {{ w.lon }}</p>
+                            <p class="card-text mb-1">Широта: {{ w.lat }}</p>
+                            <p class="card-text mb-1">Страна: {{ w.country }}</p>
+                            <p class="card-text mb-3">Область/Штат: {{ w.state|default:"Не указан" }}</p>
+                            <form action="{% url 'weather:home' %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="city" value="{{ w.name }}">
+                                <input type="hidden" name="lat" value="{{ w.lat }}">
+                                <input type="hidden" name="lon" value="{{ w.lon }}">
+                                <div class="mt-auto">
+                                    <button class="btn btn-primary w-100">Добавить</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
 
-{% if city %}
-{% for c in city %}
-<div>
-    <p> Город: {{ c.name }} </p>
-    <p> Широта/Долгота: {{ c.lat }}, {{ c.lon }} </p>
-    <p> Страна: {{ c.country }}, {{ c.state|default:"Не указан" }} </p>
-    <form action="{% url 'weather:home' %}" method="post" style="display: inline;">
-        {% csrf_token %}
-        <input type="hidden" name="city" value="{{ c.name }}">
-        <input type="hidden" name="lat" value="{{ c.lat }}">
-        <input type="hidden" name="lon" value="{{ c.lon }}">
-        <button type="submit">Добавить</button>
-    </form>
-</div>
-<hr>
-{% endfor %}
-{% endif %}
-
+{% block footer %}
+<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 mt-4 border-top">
+    <div class="px-4">
+        <span>© Weather Viewer, project from <a href="https://zhukovsd.github.io/java-backend-learning-course/">zhukovsd/java-backend-learning-course</a> roadmap.</span>
+    </div>
+</footer>
 {% endblock %}
