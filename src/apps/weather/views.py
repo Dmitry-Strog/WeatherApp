@@ -1,11 +1,13 @@
 from decimal import Decimal
 
-from django.http import HttpResponseRedirect, HttpResponse
+from django.db import IntegrityError
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from apps.weather.forms import CitySearchForm
 from .dto import LocationDTO
+from .exceptions import WeatherApiException
 from .services.location_service import LocationService
 from .services.weather_api_service import WeatherApiService
 
@@ -13,16 +15,25 @@ from .services.weather_api_service import WeatherApiService
 def home_page(request):
     form = CitySearchForm()
     if request.method == 'POST':
-        latitude = Decimal(request.POST['lat'])
-        longitude = Decimal(request.POST['lon'])
-        city = request.POST['city']
-        dto = LocationDTO(
-            name_city=city,
-            latitude=latitude,
-            longitude=longitude,
-            user=request.user)
-        LocationService.save_location(dto)
-    location = WeatherApiService().location_forecast_dto(user_id=request.user.id)
+        form = CitySearchForm(data=request.POST)
+        if form.is_valid():
+            latitude = Decimal(request.POST['lat'])
+            longitude = Decimal(request.POST['lon'])
+            city = request.POST['city']
+            dto = LocationDTO(
+                name_city=city,
+                latitude=latitude,
+                longitude=longitude,
+                user=request.user)
+            try:
+                LocationService.save_location(dto)
+            except IntegrityError:
+                form.add_error(None, "Локация с такими координатами уже существует для этого пользователя.")
+    try:
+        location = WeatherApiService().location_forecast_dto(user_id=request.user.id)
+    except WeatherApiException:
+        return render(request, "error.html")
+
     context = {
         'user': request.user,
         'form': form,
@@ -40,7 +51,10 @@ def search_result(request):
         form = CitySearchForm(data=request.POST)
         if form.is_valid():
             city = request.POST['city']
-            weather_json = WeatherApiService().get_cities(city)
+            try:
+                weather_json = WeatherApiService().get_location(city)
+            except WeatherApiException:
+                return render(request, "error.html")
 
     else:
         form = CitySearchForm()

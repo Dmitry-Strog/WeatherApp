@@ -1,0 +1,2 @@
+class WeatherApiException(Exception):
+    pass

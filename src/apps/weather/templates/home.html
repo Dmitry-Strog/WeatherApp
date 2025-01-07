@@ -22,7 +22,19 @@ Weather Viewer – Homepage
                 <button class="btn btn-outline-success" type="submit">Поиск</button>
             </form>
         </div>
-
+        {% if form.errors %}
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-6 col-md-6 col-sm-12">
+                    <div class="alert alert-danger" role="alert">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
         <div>
             <div class="row">
                 {% if user.is_authenticated %}
@@ -53,7 +65,7 @@ Weather Viewer – Homepage
                 </div>
                 {% endfor %}
                 {% else %}
-                <h1> Добавьте новую локацию </h1>
+                <h2 class="text-center mb-5">Добавьте локацию</h2>
                 {% endif %}
             </div>
         </div>
