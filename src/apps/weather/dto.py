@@ -8,6 +8,5 @@ class LocationDTO:
     name_city: str
     latitude: Decimal
     longitude: Decimal
-    id: int = None
     user: int = None
     weather: Optional[Dict] = None
