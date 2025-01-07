@@ -23,7 +23,9 @@ Weather Viewer – Search
             </form>
         </div>
         <div>
+            {% if weather %}
             <h2>Локации:</h2>
+            {% endif %}
             <div class="row">
                 {% for w in weather %}
                 <div class="col-12 col-lg-3 col-md-6 mb-4">
@@ -46,6 +48,8 @@ Weather Viewer – Search
                         </div>
                     </div>
                 </div>
+                {% empty %}
+                <h2 class="text-center mb-5">Ничего не нашлось:(</h2>
                 {% endfor %}
             </div>
         </div>
@@ -56,7 +60,8 @@ Weather Viewer – Search
 {% block footer %}
 <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 mt-4 border-top">
     <div class="px-4">
-        <span>© Weather Viewer, project from <a href="https://zhukovsd.github.io/java-backend-learning-course/">zhukovsd/java-backend-learning-course</a> roadmap.</span>
+        <span>© Weather Viewer, project from <a href="https://zhukovsd.github.io/java-backend-learning-course/">
+            zhukovsd/java-backend-learning-course</a> roadmap.</span>
     </div>
 </footer>
 {% endblock %}

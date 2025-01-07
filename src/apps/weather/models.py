@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import UniqueConstraint
 
 from apps.user.models import CustomUser
 
@@ -11,3 +12,11 @@ class Location(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=['user', 'latitude', 'longitude'],
+                name='unique_user_coordinate'
+            )
+        ]

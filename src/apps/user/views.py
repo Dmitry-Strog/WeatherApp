@@ -16,6 +16,8 @@ def login(request):
             if user:
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('weather:home'))
+            else:
+                form.add_error(None, "Неверный логин или пароль.")
     else:
         form = LoginForm()
     context = {'form': form}

@@ -14,20 +14,34 @@ Weather Viewer – Sign Up
 
     <h2 class="text-center mb-5">Регистрация</h2>
 
+    {% if form.errors %}
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-4 col-md-6 col-sm-12">
+            <div class="alert alert-danger" role="alert">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <div class="row justify-content-center">
         <div class="col-12 col-lg-4 col-md-6 col-sm-12">
             <form action="" method="POST" class="mt-4">
                 {% csrf_token %}
                 <div class="mb-3">
-                    <label for="username" class="form-label">Логин</label>
+                    <label class="form-label">Логин</label>
                     {{ form.login }}
                 </div>
                 <div class="mb-3">
-                    <label for="password" class="form-label">Пароль</label>
+                    <label class="form-label">Пароль</label>
                     {{ form.password }}
                 </div>
                 <div class="mb-3">
-                    <label for="repeat-password" class="form-label">Подтвердите пароль</label>
+                    <label class="form-label">Подтвердите пароль</label>
                     {{ form.confirm_password }}
                 </div>
                 <button type="submit" class="btn btn-primary w-100 mt-3">Зарегистрироваться</button>
