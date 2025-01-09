@@ -19,7 +19,6 @@ config = AutoConfig(search_path="WeatherApp/src/.env")
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -30,7 +29,6 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 INSTALLED_APPS = [
@@ -76,7 +74,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -106,7 +103,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -118,6 +114,52 @@ USE_I18N = True
 
 USE_TZ = True
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "filters": {
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "filters": ["require_debug_true"],
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "file": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, 'logs/weather.log'),
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "logs": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+            "filters": ["require_debug_true"],
+        },
+        "weather.services.weather_api_service": {
+            "handlers": ["console", "file"],
+            "level": "ERROR",
+            'propagate': False,
+        },
+    },
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

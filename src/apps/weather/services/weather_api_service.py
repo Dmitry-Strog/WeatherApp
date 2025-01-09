@@ -1,3 +1,4 @@
+import logging
 from decimal import Decimal
 from typing import List, Optional, Dict
 from urllib.parse import urlencode
@@ -8,6 +9,8 @@ from apps.weather.exceptions import WeatherApiException
 from apps.weather.services.location_service import LocationService
 from config import settings
 
+logger = logging.getLogger('weather.services.weather_api_service')
+
 
 class WeatherApiService:
     @classmethod
@@ -16,7 +19,7 @@ class WeatherApiService:
         if response.status_code == 200:
             return response.json()
         else:
-            # запишем логи
+            logger.error(f"api.openweathermap.org - Error {response.json()}")
             raise WeatherApiException
 
     @classmethod
