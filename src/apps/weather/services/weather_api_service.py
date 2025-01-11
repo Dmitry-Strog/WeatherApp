@@ -23,10 +23,10 @@ class WeatherApiService:
             raise WeatherApiException
 
     @classmethod
-    def get_location(cls, location):
+    def get_location_by_name(cls, location_name):
         """Получает список городов."""
         params = {
-            "q": location,
+            "q": location_name,
             "limit": 5,
             "appid": settings.WEATHER_API_KEY,
         }
@@ -35,7 +35,7 @@ class WeatherApiService:
         return cls.handle_exceptions(url)
 
     @classmethod
-    def get_forecast(cls, latitude: Decimal, longitude: Decimal) -> Optional[Dict]:
+    def get_forecast_by_coord(cls, latitude: Decimal, longitude: Decimal) -> Optional[Dict]:
         """Получает прогноз погоды по координатам (широта и долгота)."""
         params = {
             "lat": latitude,
@@ -58,6 +58,6 @@ class WeatherApiService:
                     name_city=query.name,
                     latitude=query.latitude,
                     longitude=query.longitude,
-                    weather=cls.get_forecast(query.latitude, query.longitude)
+                    weather=cls.get_forecast_by_coord(query.latitude, query.longitude)
                 ))
         return dto_list

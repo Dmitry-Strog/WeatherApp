@@ -52,7 +52,7 @@ def search_result(request):
         if form.is_valid():
             city = request.POST['city']
             try:
-                weather_json = WeatherApiService().get_location(city)
+                weather_json = WeatherApiService().get_location_by_name(city)
             except WeatherApiException:
                 return render(request, "error.html")
 
