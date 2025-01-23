@@ -14,7 +14,7 @@ from pathlib import Path
 
 from decouple import AutoConfig
 
-config = AutoConfig(search_path="WeatherApp/src/.env")
+config = AutoConfig(search_path="WeatherApp/.env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS')
+ALLOWED_HOSTS = ['194.87.187.251', 'localhost', '127.0.0.1', '0.0.0.0', 'web']
 
 # Application definition
 INSTALLED_APPS = [
@@ -80,7 +80,7 @@ DATABASES = {
         'NAME': config('POSTGRES_DB'),
         'USER': config('POSTGRES_USER'),
         'PASSWORD': config('POSTGRES_PASSWORD'),
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
