@@ -15,7 +15,8 @@ services:
     volumes:
       - ./static_volume:/src/static
     command: >
-      sh -c "chmod -R 755 /src/static &&
+      sh -c "poetry run python manage.py collectstatic --noinput
+             chmod -R 755 /src/static &&
              poetry run python manage.py migrate &&
              poetry run gunicorn weather_viewer.wsgi:application --bind 0.0.0.0:8000"
     env_file:

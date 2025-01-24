@@ -22,10 +22,12 @@ COPY --chown=user:user pyproject.toml poetry.lock ./
 RUN poetry install --no-root --no-interaction --no-ansi
 
 # Копируем остальные файлы проекта
-COPY --chown=user:user . .
+COPY --chown=user:user /src .
 
-# Собираем статические файлы
-RUN python manage.py collectstatic --noinput
+# Создаем директорию для статических файлов
+RUN mkdir -p /src/static && chown -R user:user /src/static
+
+RUN poetry run python manage.py collectstatic --noinput
 
 # Запуск приложения
 CMD ["poetry", "run", "gunicorn", "-b", "0.0.0.0:8000", "--workers", "4", "config.wsgi:application"]
