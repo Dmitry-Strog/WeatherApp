@@ -7,27 +7,22 @@ RUN apk update && \
     apk add --no-cache gcc musl-dev postgresql-dev && \
     rm -rf /var/cache/apk/*
 
-# Устанавливаем Poetry
 RUN pip install --no-cache-dir poetry
 
 RUN adduser -D user
 USER user
 
-WORKDIR /src
+WORKDIR /app
 
-# Копируем файлы Poetry
 COPY --chown=user:user pyproject.toml poetry.lock ./
 
-# Устанавливаем зависимости
-RUN poetry install --no-root --no-interaction --no-ansi
 
-# Копируем остальные файлы проекта
+RUN mkdir /app/static && chown -R user:user /app && chmod 755 /app
+
 COPY --chown=user:user /src .
 
-# Создаем директорию для статических файлов
-RUN mkdir -p /src/static && chown -R user:user /src/static
+RUN poetry install --no-root --no-interaction --no-ansi
 
 RUN poetry run python manage.py collectstatic --noinput
 
-# Запуск приложения
 CMD ["poetry", "run", "gunicorn", "-b", "0.0.0.0:8000", "--workers", "4", "config.wsgi:application"]
