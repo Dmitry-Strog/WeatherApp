@@ -9,15 +9,17 @@ RUN apk update && \
 
 RUN pip install --no-cache-dir poetry
 
-RUN adduser -D user
-USER user
-
 WORKDIR /app
 
 COPY --chown=user:user pyproject.toml poetry.lock ./
 
 
-RUN mkdir /app/static && chown -R user:user /app/static && chmod 755 /app/static
+RUN adduser -D user && \
+    mkdir -p /app/static && \
+    chown -R user:user /app/static && \
+    chmod 755 /app/static
+
+USER user
 
 COPY --chown=user:user /src .
 
