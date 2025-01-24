@@ -26,16 +26,16 @@ services:
       - db
     restart: unless-stopped
 
-    nginx:
-      build:
-        context: ./docker/nginx/
-      container_name: nginx
-      volumes:
-        - static_volume:/src/static
-      depends_on:
-        - web
-      ports:
-        - "8000:80"
+  nginx:
+    build:
+      context: ./docker/nginx/
+    container_name: nginx
+    volumes:
+      - static_volume:/src/static
+    depends_on:
+      - web
+    ports:
+      - "8000:80"
 
 
 volumes:
