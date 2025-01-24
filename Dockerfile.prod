@@ -17,7 +17,7 @@ WORKDIR /app
 COPY --chown=user:user pyproject.toml poetry.lock ./
 
 
-RUN mkdir /app/static && chown -R user:user /app && chmod 755 /app
+RUN mkdir /app/static && chown -R user:user /app/static && chmod 755 /app/static
 
 COPY --chown=user:user /src .
 
