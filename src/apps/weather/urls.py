@@ -5,7 +5,7 @@ from . import views
 app_name = 'weather'
 
 urlpatterns = [
-    path('', views.home_page, name='home'),
-    path('result_search/', views.search_result, name='search'),
-    path('delete/', views.delete_forecast, name='delete'),
+    path('', views.HomePageView.as_view(), name='home'),
+    path('result_search/', views.SearchResultView.as_view(), name='search'),
+    path('delete/', views.DeleteLocationView.as_view(), name='delete'),
 ]
