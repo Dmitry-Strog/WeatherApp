@@ -80,6 +80,7 @@ class DeleteLocationView(LoginRequiredMixin, View):
         longitude = Decimal(request.POST.get('lon'))
 
         location_dto = LocationDTO(
+            user=self.request.user.id,
             name_city=city,
             latitude=latitude,
             longitude=longitude,
