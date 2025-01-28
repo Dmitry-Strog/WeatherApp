@@ -21,4 +21,5 @@ class LocationService:
 
     @staticmethod
     def delete_location(dto: LocationDTO) -> QuerySet:
-        return Location.objects.filter(user_id=dto.user).get(latitude=dto.latitude, longitude=dto.longitude).delete()
+        return Location.objects.filter(user_id=dto.user).filter(latitude=dto.latitude,
+                                                                longitude=dto.longitude).first().delete()
