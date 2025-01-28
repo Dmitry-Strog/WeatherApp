@@ -1,42 +1,44 @@
-from django.contrib import auth
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.views import LogoutView
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.views.generic import FormView
 
 from apps.user.forms import LoginForm, RegisterForm
 
 
-def login(request):
-    if request.method == 'POST':
-        form = LoginForm(data=request.POST)
-        if form.is_valid():
-            username = request.POST['login']
-            password = request.POST['password']
-            user = auth.authenticate(username=username, password=password)
-            if user:
-                auth.login(request, user)
-                return HttpResponseRedirect(reverse('weather:home'))
-            else:
-                form.add_error(None, "Неверный логин или пароль.")
-    else:
-        form = LoginForm()
-    context = {'form': form}
-    return render(request, "login.html", context)
+class LoginView(FormView):
+    template_name = 'login.html'
+    form_class = LoginForm
+    success_url = reverse_lazy('weather:home')
+
+    def form_valid(self, form):
+        username = form.cleaned_data['login']
+        password = form.cleaned_data['password']
+        user = authenticate(username=username, password=password)
+        if user:
+            login(self.request, user)
+            return super().form_valid(form)
+        else:
+            form.add_error(None, "Неверный логин или пароль")
+            return super().form_invalid(form)
 
 
-def logout(request):
-    auth.logout(request)
+def logouts(request):
+    logout(request)
     return HttpResponseRedirect(reverse('weather:home'))
 
 
-def register(request):
-    if request.method == 'POST':
-        form = RegisterForm(data=request.POST)
-        if form.is_valid():
-            user = form.save()
-            auth.login(request, user)
-            return HttpResponseRedirect(reverse('weather:home'))
-    else:
-        form = RegisterForm()
-    context = {'form': form}
-    return render(request, "register.html", context)
+class RegisterView(FormView):
+    template_name = 'register.html'
+    form_class = RegisterForm
+    success_url = reverse_lazy('weather:home')
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return super().form_valid(form)
+
+
+class LogoutUserView(LogoutView):
+    next_page = reverse_lazy('weather:home')
