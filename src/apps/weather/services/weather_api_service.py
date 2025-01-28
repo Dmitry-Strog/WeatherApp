@@ -14,7 +14,7 @@ logger = logging.getLogger('weather.services.weather_api_service')
 
 class WeatherApiService:
     @classmethod
-    def handle_exceptions(cls, url):
+    def handle_exceptions(cls, url: str) -> Dict:
         response = requests.get(url)
         if response.status_code == 200:
             return response.json()
@@ -23,7 +23,7 @@ class WeatherApiService:
             raise WeatherApiException
 
     @classmethod
-    def get_location_by_name(cls, location_name):
+    def get_location_by_name(cls, location_name: str) -> Optional[Dict]:
         """Получает список городов."""
         params = {
             "q": location_name,
