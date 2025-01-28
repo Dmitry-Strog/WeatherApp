@@ -80,8 +80,8 @@ DATABASES = {
         'NAME': config('POSTGRES_DB'),
         'USER': config('POSTGRES_USER'),
         'PASSWORD': config('POSTGRES_PASSWORD'),
-        'HOST': 'db',
-        'PORT': '5432',
+        'HOST': config('HOST'),
+        'PORT': config('PORT'),
     }
 }
 
